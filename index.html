@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz do Vascaino</title>
+  <style>
+    body {
+      background-image: url('haha.jpg');
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
+      color: white;
+      text-align: center;
+      padding: 30px;
+      backdrop-filter: brightness(0.7);
+    }
+
+    .quiz-container {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 20px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      margin: 20px 0;
+      font-size: 1.2em;
+    }
+
+    button {
+      background-color: #ffffff;
+      border: none;
+      color: #000;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ccc;
+    }
+
+    #final-message {
+      font-size: 1.5em;
+      margin-top: 30px;
+      color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz do Vascaino</h1>
+    <div id="quiz"></div>
+    <div id="final-message"></div>
+  </div>
+
+  <audio id="acerto" src="videoplayback (1).m4a"></audio>
+  <audio id="erro" src="videoplayback (2).m4a"></audio>
+  <audio id="vitoria" src="videoplayback.m4a"></audio>
+
+  <script>
+    const perguntas = [
+      {
+        pergunta: 'Qual é minha fruta preferida?',
+        opcoes: ['Banana', 'Manga', 'Uva'],
+        resposta: 'Manga'
+      },
+      {
+        pergunta: 'Qual é o nome do meu cachorro?',
+        opcoes: ['Tobby', 'Billy', 'Rex'],
+        resposta: 'Billy'
+      },
+      {
+        pergunta: 'Qual é o nome da minha mãe?',
+        opcoes: ['Janaina', 'Maria', 'Luana'],
+        resposta: 'Janaina'
+      },
+      {
+        pergunta: 'Qual é meu time preferido?',
+        opcoes: ['Vasco', 'Palmeiras', 'Flamengo'],
+        resposta: 'Palmeiras'
+      },
+      {
+        pergunta: 'Do que eu tenho medo?',
+        opcoes: ['Altura', 'Palhaço', 'Escuro'],
+        resposta: 'Palhaço'
+      },
+    ];
+
+    const quizContainer = document.getElementById('quiz');
+    const finalMessage = document.getElementById('final-message');
+    const audioAcerto = document.getElementById('acerto');
+    const audioErro = document.getElementById('erro');
+    const audioVitoria = document.getElementById('vitoria');
+
+    let perguntaAtual = 0;
+    let acertos = 0;
+
+    function mostrarPergunta() {
+      const q = perguntas[perguntaAtual];
+      quizContainer.innerHTML = `<div class="question">${q.pergunta}</div>`;
+      q.opcoes.forEach(opcao => {
+        const btn = document.createElement('button');
+        btn.textContent = opcao;
+        btn.onclick = () => checarResposta(opcao);
+        quizContainer.appendChild(btn);
+      });
+    }
+
+    function checarResposta(opcao) {
+      const correta = perguntas[perguntaAtual].resposta;
+      if (opcao === correta) {
+        acertos++;
+        audioAcerto.play();
+      } else {
+        audioErro.play();
+      }
+      perguntaAtual++;
+      if (perguntaAtual < perguntas.length) {
+        setTimeout(mostrarPergunta, 1000);
+      } else {
+        mostrarResultado();
+      }
+    }
+
+    function mostrarResultado() {
+      quizContainer.innerHTML = '';
+      if (acertos === perguntas.length) {
+        finalMessage.textContent = 'Parabéns! Você acertou tudo!';
+        audioVitoria.play();
+      } else {
+        finalMessage.textContent = `Você acertou ${acertos} de ${perguntas.length}.`;
+      }
+    }
+
+    mostrarPergunta();
+  </script>
+</body>
+</html>
